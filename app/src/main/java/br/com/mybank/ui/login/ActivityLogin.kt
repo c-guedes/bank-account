@@ -9,6 +9,9 @@ import br.com.mybank.data.StateSuccess
 import br.com.mybank.domain.LoginresponseBO
 import br.com.mybank.ui.dashboard.ActivityCurrency
 import br.com.mybank.util.nonNullObserve
+import br.com.mybank.util.validateCPF
+import br.com.mybank.util.validateEmail
+import br.com.mybank.util.validatePassword
 import kotlinx.android.synthetic.main.activity_login.*
 import org.jetbrains.anko.startActivity
 import org.koin.android.ext.android.inject
@@ -45,10 +48,21 @@ class ActivityLogin : BaseActivity(
     }
 
     private fun initViews() {
+        validateUserEntry()
         setupButton()
     }
 
     private fun setupButton() {
-        btDoLogin.setOnClickListener { viewModel.doLogin() }
+        btDoLogin.setOnClickListener {
+            validateUserEntry()
+            viewModel.doLogin(
+                user = etUserLogin.text.toString(),
+                password = etUserPassword.text.toString()
+            )
+        }
+    }
+
+    private fun validateUserEntry(): Boolean {
+        return (etUserLogin.validateCPF() or etUserLogin.validateEmail()) and etUserPassword.validatePassword()
     }
 }
