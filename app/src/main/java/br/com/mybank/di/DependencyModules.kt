@@ -4,10 +4,10 @@ import br.com.mybank.api.RetrofitProvider
 import br.com.mybank.data.BankApi
 import br.com.mybank.data.BankApiRepositoryImpl
 import br.com.mybank.data.SessionUtil
-import br.com.mybank.domain.usecase.LoginUseCase
-import br.com.mybank.domain.usecase.PaymentsUseCase
+import br.com.mybank.domain.usecase.*
 import br.com.mybank.ui.dashboard.CurrencyViewModel
 import br.com.mybank.ui.login.LoginViewModel
+import br.com.mybank.util.SharedPrefs
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
@@ -15,24 +15,31 @@ object DependencyModules {
     val useCaseModule = module {
         single { LoginUseCase(get()) }
         single { PaymentsUseCase(get()) }
+        single { UserDataUseCase(get()) }
+        single { HasLoggedInUseCase(get()) }
     }
 
     val sessionUser = module {
         single { SessionUtil }
     }
 
+    val preferences = module {
+        single { SharedPrefs }
+    }
+
     val viewModelModule = module {
         viewModel {
-            LoginViewModel(get())
+            LoginViewModel(get(), get(), get())
         }
 
         viewModel {
-            CurrencyViewModel(get())
+            CurrencyViewModel(get(), get())
         }
     }
 
     val repositoryImpl = module {
         single { BankApiRepositoryImpl(api = get(), context = get()) }
+        single { LocalRepositoryImpl() }
     }
 
     val apiModule = module {
