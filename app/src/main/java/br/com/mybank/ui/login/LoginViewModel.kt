@@ -5,16 +5,21 @@ import androidx.lifecycle.MutableLiveData
 import br.com.mybank.BaseViewModel
 import br.com.mybank.data.*
 import br.com.mybank.data.model.LoginRequest
+import br.com.mybank.data.model.UserOnboardData
 import br.com.mybank.domain.LoginresponseBO
+import br.com.mybank.domain.usecase.HasLoggedInUseCase
 import br.com.mybank.domain.usecase.LoginUseCase
+import br.com.mybank.domain.usecase.UserDataUseCase
 
 class LoginViewModel(
-    private val loginUseCase: LoginUseCase
+    private val loginUseCase: LoginUseCase,
+    private val hasLoggedInUseCase: HasLoggedInUseCase,
+    private val userDataUseCase: UserDataUseCase
 ) : BaseViewModel() {
     val loginState: LiveData<StateResponse<LoginresponseBO>> get() = _loginState
     private val _loginState = MutableLiveData<StateResponse<LoginresponseBO>>()
 
-    fun doLogin(user: String, password: String) {
+    fun doLogin(user: String?, password: String?) {
         _loginState.value = StateLoading()
         loginUseCase.execute(
             LoginUseCase.Params(
@@ -38,4 +43,23 @@ class LoginViewModel(
             disposables.add(it)
         }
     }
+
+    fun userHasLoggedIn(): Boolean = hasLoggedInUseCase.userHasLoggedIn()
+
+    fun setLoggedUser() {
+        hasLoggedInUseCase.setLoggedUser(true)
+    }
+
+    fun setUserData(login: String?, password: String?) {
+        userDataUseCase.setUserData(
+            UserOnboardData(
+                user = login,
+                password = password
+            )
+        )
+    }
+
+    fun getUserData(): UserOnboardData =
+        userDataUseCase.getUserData()
+
 }
