@@ -2,7 +2,6 @@ package br.com.mybank.api
 
 import br.com.mybank.BASE_URL
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -22,14 +21,7 @@ object RetrofitProvider {
     }
 
     private fun providesOkHttpClientBuilder(): OkHttpClient.Builder {
-        val logging = providesOkHttpClientLogging()
-        return OkHttpClient.Builder().addInterceptor(logging)
-    }
-
-    private fun providesOkHttpClientLogging(): HttpLoggingInterceptor {
-        return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
+        return OkHttpClient.Builder()
     }
 
     private fun providesRetrofitClient(okHttpClient: OkHttpClient): Retrofit {
