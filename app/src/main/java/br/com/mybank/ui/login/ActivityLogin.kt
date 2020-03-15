@@ -28,6 +28,11 @@ class ActivityLogin : BaseActivity(
         setupObserver()
     }
 
+    override fun onResume() {
+        super.onResume()
+        hasCredentials()
+    }
+
     private fun setupObserver() {
         viewModel.loginState.nonNullObserve(this) { state ->
             processLoginState(state)
@@ -47,22 +52,35 @@ class ActivityLogin : BaseActivity(
         }
     }
 
+    private fun hasCredentials() {
+        if (viewModel.userHasLoggedIn()) {
+            viewModel.getUserData().let { userData ->
+                requestLogin(userData.user, userData.password)
+            }
+        }
+    }
+
     private fun initViews() {
-        validateUserEntry()
         setupButton()
+    }
+
+    private fun requestLogin(user: String?, password: String?) {
+        viewModel.doLogin(
+            user = user,
+            password = password
+        )
+        viewModel.setUserData(user, password)
+        viewModel.setLoggedUser()
     }
 
     private fun setupButton() {
         btDoLogin.setOnClickListener {
-            validateUserEntry()
-            viewModel.doLogin(
-                user = etUserLogin.text.toString(),
-                password = etUserPassword.text.toString()
-            )
+            if (isValidUserEntry())
+                requestLogin(etUserLogin.text.toString(), etUserPassword.text.toString())
         }
     }
 
-    private fun validateUserEntry(): Boolean {
+    private fun isValidUserEntry(): Boolean {
         return (etUserLogin.validateCPF() or etUserLogin.validateEmail()) and etUserPassword.validatePassword()
     }
 }
