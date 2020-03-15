@@ -53,12 +53,20 @@ class ActivityCurrency : BaseActivity(
 
     private fun initViews() {
         setupClientHeader()
+        setupButton()
         viewModel.getPaymentsList()
     }
 
+    private fun setupButton() {
+        ivLogout.setOnClickListener {
+            viewModel.clearUserData()
+            finish()
+        }
+    }
+
     private fun setupClientHeader() {
-        tvUserName.text = SessionUtil.client.name
-        tvAccountNumber.text = SessionUtil.client.bankAccount
-        tvCurrentBalance.text = SessionUtil.client.balance.formatValueToMonetary()
+        tvUserName.text = SessionUtil.client?.name
+        tvAccountNumber.text = SessionUtil.client?.bankAccount
+        tvCurrentBalance.text = SessionUtil.client?.balance?.formatValueToMonetary()
     }
 }

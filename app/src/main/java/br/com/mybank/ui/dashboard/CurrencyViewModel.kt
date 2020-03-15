@@ -7,9 +7,11 @@ import br.com.mybank.BaseViewModel
 import br.com.mybank.data.*
 import br.com.mybank.domain.PaymentsResponseBO
 import br.com.mybank.domain.usecase.PaymentsUseCase
+import br.com.mybank.domain.usecase.UserDataUseCase
 
 class CurrencyViewModel(
-    private val paymentsUseCase: PaymentsUseCase
+    private val paymentsUseCase: PaymentsUseCase,
+    private val userDataUseCase: UserDataUseCase
 ) : BaseViewModel() {
     val paymentsResponse: LiveData<StateResponse<PaymentsResponseBO>> get() = _paymentsResponse
     private val _paymentsResponse = MutableLiveData<StateResponse<PaymentsResponseBO>>()
@@ -19,7 +21,7 @@ class CurrencyViewModel(
         _paymentsResponse.value = StateLoading()
         paymentsUseCase.execute(
             PaymentsUseCase.Params(
-                idUser = SessionUtil.client.userId
+                idUser = SessionUtil.client?.userId
             )
         ).subscribe(
             { response -> _paymentsResponse.value = StateSuccess(response) },
@@ -27,5 +29,9 @@ class CurrencyViewModel(
         ).let {
             disposables.add(it)
         }
+    }
+
+    fun clearUserData() {
+        userDataUseCase.clearUserData()
     }
 }
