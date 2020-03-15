@@ -14,13 +14,13 @@ class LoginViewModel(
     val loginState: LiveData<StateResponse<LoginresponseBO>> get() = _loginState
     private val _loginState = MutableLiveData<StateResponse<LoginresponseBO>>()
 
-    fun doLogin() {
+    fun doLogin(user: String, password: String) {
         _loginState.value = StateLoading()
         loginUseCase.execute(
             LoginUseCase.Params(
                 LoginRequest(
-                    user = "test_user",
-                    password = "Test@1"
+                    user = user,
+                    password = password
                 )
             )
         ).subscribe(
