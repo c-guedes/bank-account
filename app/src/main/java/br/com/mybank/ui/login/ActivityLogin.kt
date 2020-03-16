@@ -6,7 +6,7 @@ import br.com.mybank.R
 import br.com.mybank.data.SessionUtil
 import br.com.mybank.data.StateResponse
 import br.com.mybank.data.StateSuccess
-import br.com.mybank.domain.LoginresponseBO
+import br.com.mybank.domain.LoginResponseBO
 import br.com.mybank.ui.dashboard.ActivityCurrency
 import br.com.mybank.util.nonNullObserve
 import br.com.mybank.util.validateCPF
@@ -39,13 +39,13 @@ class ActivityLogin : BaseActivity(
         }
     }
 
-    private fun processLoginState(state: StateResponse<LoginresponseBO>) {
+    private fun processLoginState(state: StateResponse<LoginResponseBO>) {
         when (state) {
             is StateSuccess -> setupClient(state.data)
         }
     }
 
-    private fun setupClient(data: LoginresponseBO) {
+    private fun setupClient(data: LoginResponseBO) {
         data.userAccount?.let {
             SessionUtil.client = it
             startActivity<ActivityCurrency>()

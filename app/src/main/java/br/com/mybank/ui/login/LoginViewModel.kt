@@ -6,7 +6,7 @@ import br.com.mybank.BaseViewModel
 import br.com.mybank.data.*
 import br.com.mybank.data.model.LoginRequest
 import br.com.mybank.data.model.UserOnboardData
-import br.com.mybank.domain.LoginresponseBO
+import br.com.mybank.domain.LoginResponseBO
 import br.com.mybank.domain.usecase.HasLoggedInUseCase
 import br.com.mybank.domain.usecase.LoginUseCase
 import br.com.mybank.domain.usecase.UserDataUseCase
@@ -16,8 +16,8 @@ class LoginViewModel(
     private val hasLoggedInUseCase: HasLoggedInUseCase,
     private val userDataUseCase: UserDataUseCase
 ) : BaseViewModel() {
-    val loginState: LiveData<StateResponse<LoginresponseBO>> get() = _loginState
-    private val _loginState = MutableLiveData<StateResponse<LoginresponseBO>>()
+    val loginState: LiveData<StateResponse<LoginResponseBO>> get() = _loginState
+    private val _loginState = MutableLiveData<StateResponse<LoginResponseBO>>()
 
     fun doLogin(user: String?, password: String?) {
         _loginState.value = StateLoading()
