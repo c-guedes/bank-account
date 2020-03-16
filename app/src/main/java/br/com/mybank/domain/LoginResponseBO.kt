@@ -6,7 +6,7 @@ import br.com.mybank.data.model.UserAccount
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class LoginresponseBO(
+data class LoginResponseBO(
     val backendError: BackendError?,
     val userAccount: UserAccount?
 ) : Parcelable
