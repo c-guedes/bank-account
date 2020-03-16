@@ -72,8 +72,6 @@ class LoginUseCaseTest {
 
     @Test
     fun executeWithError() {
-        var e: Throwable? = null
-
         every {
             useCase.execute(
                 params = LoginUseCase.Params(
@@ -85,20 +83,16 @@ class LoginUseCaseTest {
             )
         } returns Single.error(Throwable("No data set"))
 
-        try {
-            useCase.execute(
-                params = LoginUseCase.Params(
-                    LoginRequest(
-                        user = "caique-guedes@hotmail.com",
-                        password = "Ca1qu&"
-                    )
+        val useCase = useCase.execute(
+            params = LoginUseCase.Params(
+                LoginRequest(
+                    user = "caique-guedes@hotmail.com",
+                    password = "Ca1qu&"
                 )
-            ).blockingGet()
-        } catch (ex: Throwable) {
-            e = ex
-        }
+            )
+        ).test().errors().isNotEmpty()
 
-        e.assertInstanceOf(RuntimeException(Throwable("No data set"))::class.java)
+        assert(useCase)
     }
 
     private infix fun <T> T.assertInstanceOf(clazz: Class<*>) {
