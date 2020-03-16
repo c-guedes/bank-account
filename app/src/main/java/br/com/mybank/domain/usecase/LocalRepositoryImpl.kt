@@ -1,6 +1,7 @@
 package br.com.mybank.domain.usecase
 
 import br.com.mybank.data.SessionUtil
+import br.com.mybank.data.model.UserAccount
 import br.com.mybank.data.model.UserOnboardData
 import br.com.mybank.util.SharedPrefs.clearShared
 import br.com.mybank.util.SharedPrefs.hasLoggedIn
@@ -26,6 +27,6 @@ class LocalRepositoryImpl {
 
     fun clearUserData() {
         clearShared()
-        SessionUtil.client = null
+        SessionUtil.client = UserAccount()
     }
 }
